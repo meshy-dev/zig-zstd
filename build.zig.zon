@@ -1,0 +1,16 @@
+.{
+    .name = .zstd_zig,
+    .version = "1.5.7",
+    .minimum_zig_version = "0.15.0",
+    .fingerprint = 0xd4d2d0ba85f6cfa0,
+    .dependencies = .{
+        .zstd = .{
+            .url = "git+https://github.com/facebook/zstd.git?ref=v1.5.7#f8745da6ff1ad1e7bab384bd1f9d742439278e99",
+            .hash = "N-V-__8AAN2ggQDlnBpoZdPfheB3so_Lf5zVRc7slUGIQF98",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+    },
+}
