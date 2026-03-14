@@ -48,12 +48,12 @@ pub fn build(b: *std.Build) void {
     zstd.installHeader(upstream.path("lib/zstd.h"), "zstd.h");
     zstd.installHeader(upstream.path("lib/zdict.h"), "zdict.h");
     zstd.installHeader(upstream.path("lib/zstd_errors.h"), "zstd_errors.h");
-    if (compression) zstd.addCSourceFiles(.{ .root = upstream.path("lib"), .files = compression_sources });
-    if (decompression) zstd.addCSourceFiles(.{ .root = upstream.path("lib"), .files = decompress_sources });
-    if (dictbuilder) zstd.addCSourceFiles(.{ .root = upstream.path("lib"), .files = dict_builder_sources });
-    if (deprecated) zstd.addCSourceFiles(.{ .root = upstream.path("lib"), .files = deprecated_sources });
+    if (compression) zstd.root_module.addCSourceFiles(.{ .root = upstream.path("lib"), .files = compression_sources });
+    if (decompression) zstd.root_module.addCSourceFiles(.{ .root = upstream.path("lib"), .files = decompress_sources });
+    if (dictbuilder) zstd.root_module.addCSourceFiles(.{ .root = upstream.path("lib"), .files = dict_builder_sources });
+    if (deprecated) zstd.root_module.addCSourceFiles(.{ .root = upstream.path("lib"), .files = deprecated_sources });
     if (legacy_support != 0) {
-        for (legacy_support..8) |i| zstd.addCSourceFile(.{ .file = upstream.path(b.fmt("lib/legacy/zstd_v0{d}.c", .{i})) });
+        for (legacy_support..8) |i| zstd.root_module.addCSourceFile(.{ .file = upstream.path(b.fmt("lib/legacy/zstd_v0{d}.c", .{i})) });
     }
 
     if (target.result.cpu.arch == .x86_64) {
@@ -98,11 +98,11 @@ pub fn build(b: *std.Build) void {
             .link_libc = true,
         }),
     });
-    zstd_cli.linkLibrary(zstd);
-    zstd_cli.addIncludePath(upstream.path("lib"));
-    zstd_cli.addIncludePath(upstream.path("lib/common"));
-    zstd_cli.addIncludePath(upstream.path("programs"));
-    zstd_cli.addCSourceFiles(.{
+    zstd_cli.root_module.linkLibrary(zstd);
+    zstd_cli.root_module.addIncludePath(upstream.path("lib"));
+    zstd_cli.root_module.addIncludePath(upstream.path("lib/common"));
+    zstd_cli.root_module.addIncludePath(upstream.path("programs"));
+    zstd_cli.root_module.addCSourceFiles(.{
         .root = upstream.path("programs"),
         .files = cli_sources,
     });
@@ -130,9 +130,9 @@ pub fn build(b: *std.Build) void {
                 .optimize = optimize,
             }),
         });
-        exe.addCSourceFile(.{ .file = upstream.path(b.fmt("examples/{s}.c", .{name})) });
-        exe.addIncludePath(upstream.path("lib"));
-        exe.linkLibrary(zstd);
+        exe.root_module.addCSourceFile(.{ .file = upstream.path(b.fmt("examples/{s}.c", .{name})) });
+        exe.root_module.addIncludePath(upstream.path("lib"));
+        exe.root_module.linkLibrary(zstd);
         const install = b.addInstallArtifact(exe, .{ .dest_dir = .{ .override = .{ .custom = "examples" } } });
         examples_step.dependOn(&install.step);
     }
