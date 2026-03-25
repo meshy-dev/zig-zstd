@@ -1,0 +1,7 @@
+.{
+    .name = .zstd_repro,
+    .version = "0.0.0",
+    .minimum_zig_version = "0.16.0-dev.2905+5d71e3051",
+    .fingerprint = 0x7aeb74faabcf9586,
+    .paths = .{ "build.zig", "build.zig.zon" },
+}

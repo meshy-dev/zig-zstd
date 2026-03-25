@@ -1,0 +1,8 @@
+.{
+    .name = .zig_fetch_symlink_repro,
+    .version = "0.0.0",
+    .minimum_zig_version = "0.16.0-dev.2905+5d71e3051",
+    .fingerprint = 0x6cea57401166b8bc,
+    .dependencies = .{ .zstd_repro = .{ .path = "vendor/zstd_repro" } },
+    .paths = .{ "build.zig", "build.zig.zon", "vendor" },
+}
